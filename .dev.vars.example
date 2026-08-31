@@ -1,0 +1,33 @@
+# Copy this file to `.dev.vars` for local `wrangler pages dev` testing.
+# .dev.vars is gitignored -- never commit real secrets, and never put real
+# values directly in wrangler.toml.
+#
+# In production, set these as Pages secrets instead:
+#   wrangler pages secret put CF_ACCOUNT_ID
+#   wrangler pages secret put CF_EMAIL_API_TOKEN
+#   wrangler pages secret put CONTACT_TO_EMAIL
+#   wrangler pages secret put CONTACT_FROM_EMAIL
+# or via the dashboard: Workers & Pages -> smart-geeks -> Settings ->
+# Environment variables.
+
+# Cloudflare account ID (dashboard sidebar, or `wrangler whoami`)
+CF_ACCOUNT_ID=
+
+# A Cloudflare API token scoped to send email via the Email Service REST
+# API (see DEPLOYMENT.md for exact scope/setup). Requires the sending
+# domain to be verified in Cloudflare Email Service first.
+CF_EMAIL_API_TOKEN=
+
+# Where contact-form submissions should be delivered
+CONTACT_TO_EMAIL=support@smartgeeks.ca
+
+# Must be an address on a domain verified in Cloudflare Email Service
+CONTACT_FROM_EMAIL=website@smartgeeks.ca
+
+# Optional: leave unset until you have a real GA4 property / Google Ads
+# conversion setup. See src/data/business.py ANALYTICS_CONFIG -- these are
+# read at BUILD time (baked into the generated HTML), not at runtime, so
+# they are not read from this file by functions/*.js. Listed here only so
+# every configurable value in the project is discoverable from one place.
+# GA4_MEASUREMENT_ID=
+# GOOGLE_ADS_CONVERSION_ID=

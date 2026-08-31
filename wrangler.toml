@@ -1,0 +1,29 @@
+name = "smart-geeks"
+compatibility_date = "2026-08-01"
+
+# This project targets Cloudflare Pages (with Pages Functions), not Workers
+# Static Assets -- see DEPLOYMENT.md "Why Pages, not Workers" for why that
+# was chosen deliberately. `pages_build_output_dir` points at the static
+# output produced by `python3 build.py`.
+pages_build_output_dir = "public"
+
+# --- Optional: rate-limit KV namespace ------------------------------------
+# functions/api/contact.js checks for a binding named RATE_LIMIT_KV and, if
+# present, applies a best-effort per-IP rate limit. If you don't create and
+# bind a KV namespace, the contact form still works -- it just skips that
+# extra check. To enable it:
+#   wrangler kv namespace create RATE_LIMIT_KV
+# then uncomment and fill in the id below (or bind it from the Pages
+# dashboard: Settings -> Functions -> KV namespace bindings).
+#
+# [[kv_namespaces]]
+# binding = "RATE_LIMIT_KV"
+# id = "REPLACE_WITH_REAL_NAMESPACE_ID"
+
+# --- Secrets (do NOT put real values here) ---------------------------------
+# CF_ACCOUNT_ID, CF_EMAIL_API_TOKEN, CONTACT_TO_EMAIL, CONTACT_FROM_EMAIL are
+# read by functions/api/contact.js. Set the real values as Pages secrets
+# (dashboard: Settings -> Environment variables -> Production, or
+# `wrangler pages secret put <NAME>`), never in this file. See
+# .dev.vars.example for local development and DEPLOYMENT.md for the full
+# setup walkthrough.

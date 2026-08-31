@@ -1,0 +1,26 @@
+# Cloudflare Pages reads this file from the build OUTPUT directory (public/).
+# build.py copies this file there automatically -- edit it here, not in public/.
+#
+# Hostname-dependent behaviour (noindex on non-production hosts) is handled
+# dynamically in functions/_middleware.js instead, since this file can't
+# branch on hostname.
+
+/*
+  X-Content-Type-Options: nosniff
+  X-Frame-Options: DENY
+  Referrer-Policy: strict-origin-when-cross-origin
+  Permissions-Policy: camera=(), microphone=(), geolocation=(), payment=(), usb=()
+  Content-Security-Policy: default-src 'self'; img-src 'self' data:; style-src 'self' 'unsafe-inline'; script-src 'self' 'unsafe-inline' https://www.googletagmanager.com; connect-src 'self' https://www.google-analytics.com; frame-ancestors 'none'; base-uri 'self'; form-action 'self'
+  Strict-Transport-Security: max-age=31536000; includeSubDomains; preload
+
+# Long-lived, safe to cache aggressively: filenames carry a content-hash
+# query string (?v=<hash>) appended by build.py, so a content change ships
+# under a new URL rather than silently reusing a stale cached copy.
+/assets/css/*
+  Cache-Control: public, max-age=31536000, immutable
+/assets/js/*
+  Cache-Control: public, max-age=31536000, immutable
+/assets/icons/*
+  Cache-Control: public, max-age=31536000, immutable
+/assets/images/*
+  Cache-Control: public, max-age=2592000

@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
+  <rect width="1200" height="630" fill="#0A1A2F"/>
+  <rect x="0" y="0" width="1200" height="630" fill="url(#g)" opacity="0.5"/>
+  <defs>
+    <linearGradient id="g" x1="0" y1="0" x2="1200" y2="630" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#0A1A2F"/>
+      <stop offset="1" stop-color="#14304F"/>
+    </linearGradient>
+  </defs>
+  <g transform="translate(120,205) scale(3.5)">
+    <rect width="64" height="64" rx="14" fill="#0A1A2F" stroke="#1E3A5C" stroke-width="1"/>
+    <g fill="none" stroke="#00E676" stroke-width="3" stroke-linecap="round">
+      <path d="M32 14v8"/><path d="M32 42v8"/><path d="M14 32h8"/><path d="M42 32h8"/>
+      <path d="M20.5 20.5l5.6 5.6"/><path d="M37.9 37.9l5.6 5.6"/>
+      <path d="M43.5 20.5l-5.6 5.6"/><path d="M26.1 37.9l-5.6 5.6"/>
+    </g>
+    <rect x="24" y="24" width="16" height="16" rx="3" fill="#007BFF"/>
+  </g>
+  <text x="360" y="290" font-family="Arial, Helvetica, sans-serif" font-size="64" font-weight="700" fill="#FFFFFF">Smart Geeks</text>
+  <text x="360" y="345" font-family="Arial, Helvetica, sans-serif" font-size="30" fill="#C7D2E0">Independent Electronics Repair &#8212; Surrey, BC</text>
+</svg>

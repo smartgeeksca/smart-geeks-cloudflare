@@ -1,0 +1,10 @@
+# Cloudflare Pages reads this file from the build OUTPUT directory
+# (public/) -- build.py copies it there automatically.
+#
+# Canonicalize the apex domain to www. This rule only takes effect once
+# smartgeeks.ca (no www) is ALSO added as a custom domain on this Pages
+# project -- see DEPLOYMENT.md "Custom domain setup". If you'd rather not
+# add the apex as a second custom domain, use a Cloudflare Redirect Rule at
+# the DNS/zone level instead (also documented in DEPLOYMENT.md); either
+# approach achieves the same www.smartgeeks.ca canonical.
+https://smartgeeks.ca/*  https://www.smartgeeks.ca/:splat  301!
