@@ -166,13 +166,22 @@ Pages).
 The production canonical for this build is `https://www.smartgeeks.ca/`.
 
 1. Attach `www.smartgeeks.ca` as a custom domain on the Pages project first.
-2. To make `smartgeeks.ca` (no www) redirect to `www`, either:
-   - **Also** attach `smartgeeks.ca` as a second custom domain on this same
-     Pages project -- `_redirects` already contains the
-     `smartgeeks.ca/* -> www.smartgeeks.ca/:splat 301!` rule, or
-   - Leave the apex on its existing DNS setup and add a Cloudflare
-     **Redirect Rule** at the zone level instead (Rules -> Redirect Rules),
-     which works regardless of which product apex traffic is served from.
+2. To make `smartgeeks.ca` (no www) redirect to `www`, add a Cloudflare
+   **Redirect Rule** at the zone level (on the `smartgeeks.ca` zone: **Rules
+   -> Redirect Rules -> Create rule**) matching hostname equals
+   `smartgeeks.ca`, redirecting to `https://www.smartgeeks.ca${uri.path}`
+   (or the "static redirect" / "dynamic redirect" UI equivalent), status
+   301, preserving query string.
+
+   This is the **only** correct mechanism for this -- confirmed against a
+   real deploy log during this project's own rollout: Cloudflare Pages'
+   `_redirects` file only accepts a relative path as a rule's source, so a
+   host-conditional rule such as `https://smartgeeks.ca/* ->
+   https://www.smartgeeks.ca/:splat 301!` is parsed as an invalid absolute
+   URL and silently dropped ("Only relative URLs are allowed" in the build
+   log) -- it never redirects anything, attached as a second custom domain
+   or not. `_redirects` (see that file's own comments) is reserved for
+   same-host, same-path redirects only.
 3. Do not point `smartgeeks.ca` at a *different* unrelated site while also
    trying to canonicalize to it -- confirm what is currently live at both
    hostnames before cutover (see "Owner action: confirm domain ownership"

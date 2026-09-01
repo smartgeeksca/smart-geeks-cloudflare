@@ -1,10 +1,21 @@
 # Cloudflare Pages reads this file from the build OUTPUT directory
 # (public/) -- build.py copies it there automatically.
 #
-# Canonicalize the apex domain to www. This rule only takes effect once
-# smartgeeks.ca (no www) is ALSO added as a custom domain on this Pages
-# project -- see DEPLOYMENT.md "Custom domain setup". If you'd rather not
-# add the apex as a second custom domain, use a Cloudflare Redirect Rule at
-# the DNS/zone level instead (also documented in DEPLOYMENT.md); either
-# approach achieves the same www.smartgeeks.ca canonical.
-https://smartgeeks.ca/*  https://www.smartgeeks.ca/:splat  301!
+# Apex-to-www canonicalization (smartgeeks.ca -> www.smartgeeks.ca) is
+# deliberately NOT handled here. Confirmed against a real Cloudflare Pages
+# build log: the _redirects file only accepts a relative path as the
+# source of a rule, so a host-conditional redirect like
+# "https://smartgeeks.ca/* https://www.smartgeeks.ca/:splat 301!" is parsed
+# as invalid and silently skipped -- Cloudflare logs "Only relative URLs
+# are allowed" and drops the line, so it would never actually run.
+#
+# The correct way to canonicalize apex -> www on Cloudflare is a
+# zone-level Redirect Rule (Rules -> Redirect Rules in the dashboard, on
+# the smartgeeks.ca zone) -- see DEPLOYMENT.md "Custom domain setup" for
+# the exact steps. That mechanism operates on incoming hostname before
+# Pages ever sees the request, which is what a domain-level redirect
+# actually requires.
+#
+# This file is kept (rather than deleted) as the place same-path,
+# same-host redirects belong if any are ever needed -- e.g.
+#   /old-page/*  /new-page/:splat  301

@@ -1,5 +1,35 @@
 # Changelog
 
+## v1.1.1 -- Fix apex-to-www redirect after first real production deploy (2026-09-01)
+
+The first real Cloudflare Pages deploy of this project (Git-connected, per
+DEPLOYMENT.md Option A) surfaced one real bug: Cloudflare's build log
+reported `_redirects` line 10 as invalid --
+
+```
+Found invalid redirect lines:
+  - #10: https://smartgeeks.ca/*  https://www.smartgeeks.ca/:splat  301!
+    Only relative URLs are allowed. Skipping absolute URL https://smartgeeks.ca/*.
+```
+
+Cloudflare Pages' `_redirects` file only accepts a relative path as a
+rule's *source* -- it cannot match on which hostname a request arrived on,
+so a host-conditional redirect like this one is always parsed as invalid
+and dropped, whether or not `smartgeeks.ca` is also attached as a second
+custom domain on the project (the condition DEPLOYMENT.md v1.1.0
+incorrectly said made it take effect). It never worked; the deploy itself
+was unaffected (everything else in the file parsed and applied normally).
+
+### Fixed
+
+- `_redirects`: removed the invalid apex-to-www rule and replaced it with
+  an explanatory comment, so the file no longer contains a rule that looks
+  like it does something but doesn't.
+- `DEPLOYMENT.md` "Custom domain setup": now documents the zone-level
+  **Redirect Rule** (Rules -> Redirect Rules on the `smartgeeks.ca` zone)
+  as the one correct mechanism for apex -> www canonicalization, instead
+  of presenting it as one of two equally-valid options.
+
 ## v1.1.0 -- No-Wrangler deployment path (2026-08-31)
 
 Added `alt-deploy/_worker.js`: a self-contained "Advanced Mode" Worker
