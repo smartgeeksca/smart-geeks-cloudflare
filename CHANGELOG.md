@@ -1,5 +1,55 @@
 # Changelog
 
+## v1.3.0 -- Design System V2: Tailcast-inspired visual upgrade (2026-09-01)
+
+**Scope:** CSS and JS only -- no content, business data, structured data,
+or page count changed. Inspired by the layout/spacing/shadow/motion
+conventions of the open-source Tailcast template (github.com/matt765/
+Tailcast, MIT) as a design-language reference only; no Tailcast code,
+copy, branding, or assets were copied. All color values remain the
+brief's original brand tokens (#007BFF / #0A1A2F / #00E676 / #F5F7FA /
+#333333) -- every WCAG AA contrast figure in QA-REPORT.md is unchanged
+and was independently re-verified after this pass (33 pass / 1 expected
+warn / 0 fail, identical to the pre-redesign result).
+
+### Added
+- Layered surface/shadow/radius/motion token system in `:root`
+  (`--surface-raised`, `--border-subtle`/`--border-strong`, `--shadow-xs`
+  through `--shadow-lg`, `--shadow-glow`, `--radius-lg`/`--radius-xl`/
+  `--radius-full`, `--ease`/`--dur-*`), layered on top of the existing
+  8px spacing scale and type scale without changing either.
+- Abstract, CSS-only circuit-board-pattern treatment for `.img-frame`
+  (the existing placeholder-until-real-photography component) and for
+  the dark CTA-block/footer surfaces -- no stock photography, no
+  fabricated product images; real photography remains a documented
+  owner action (see IMAGE-ASSET-MANIFEST.md).
+- Scroll-reveal and header-shadow-on-scroll, implemented as optional
+  progressive enhancement in `main.js`: skipped entirely when
+  `prefers-reduced-motion` is set or `IntersectionObserver` is
+  unavailable, and every targeted element (cards, FAQ rows, trust
+  badges, section headers) is fully visible with no JavaScript at all.
+- Pill-shaped trust badges in the hero trust row, lift/glow interaction
+  states on primary buttons and cards, a rotating FAQ indicator, iOS
+  safe-area padding on the mobile action bar, and a focus-visible glow
+  ring on form fields (in addition to the existing border-color change).
+
+### Changed
+- `src/assets/css/style.css`: 18,396 -> 22,921 bytes (14 targeted,
+  reviewed edits -- see `LAUNCH-ACTIVATION-PLAN.md`-style verification
+  in the design audit for the full list).
+- `src/assets/js/main.js`: 5,708 -> 8,362 bytes (two additive,
+  self-contained functions appended; no existing form/analytics logic
+  touched).
+
+### Not changed
+- No `.py` content module touched (`services.py`, `pages.py`,
+  `legal.py`, `landing.py`, `business.py`) -- every one of the 23
+  generated pages, 21 sitemap URLs, and all structured data are
+  byte-identical in content to the pre-redesign build; only the
+  presentation layer changed.
+- No color hex value changed -- every button/text/background combination
+  keeps its previously-verified WCAG AA contrast ratio exactly.
+
 ## v1.2.0 -- Google Ads policy recovery: retire repair Ads landing pages (2026-09-01)
 
 **Root cause corrected.** Every earlier reference in this codebase and its

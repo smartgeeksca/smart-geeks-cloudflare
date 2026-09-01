@@ -141,4 +141,74 @@
   }
 
   document.querySelectorAll("form[data-sg-form]").forEach(initForm);
+
+  // ---- Header shadow-on-scroll (Design System V2) -------------------------
+  // Pure class toggle; the visual transition is defined in CSS and already
+  // honors prefers-reduced-motion via the global rule at the top of
+  // style.css. No layout shift, no animation loop -- one scroll listener,
+  // passive, reading a single boolean.
+  (function headerScrollState() {
+    var header = document.querySelector(".site-header");
+    if (!header) return;
+    var ticking = false;
+    function update() {
+      header.classList.toggle("is-scrolled", window.scrollY > 8);
+      ticking = false;
+    }
+    window.addEventListener(
+      "scroll",
+      function () {
+        if (ticking) return;
+        ticking = true;
+        window.requestAnimationFrame(update);
+      },
+      { passive: true }
+    );
+    update();
+  })();
+
+  // ---- Scroll-reveal (Design System V2) ------------------------------------
+  // Optional, additive only: every targeted element is real, already-visible
+  // page content (cards, FAQ rows, trust badges, section headers) -- if this
+  // never runs (no JS, old browser, reduced motion), nothing is hidden and
+  // nothing breaks. Respects prefers-reduced-motion explicitly, not just via
+  // CSS, so the observer itself never fires unnecessary work for those users.
+  (function scrollReveal() {
+    var reduceMotion =
+      window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    var targets = document.querySelectorAll(
+      [
+        ".service-card",
+        ".info-card",
+        ".faq-item",
+        ".hero-trust li",
+        ".section-head",
+        ".step-list li",
+      ].join(",")
+    );
+    if (!targets.length) return;
+    if (reduceMotion || typeof window.IntersectionObserver !== "function") {
+      // Nothing to animate for these visitors / this browser -- leave the
+      // elements exactly as server-rendered (fully visible, no .reveal class).
+      return;
+    }
+    var io = new IntersectionObserver(
+      function (entries) {
+        entries.forEach(function (entry) {
+          if (!entry.isIntersecting) return;
+          entry.target.classList.add("is-visible");
+          io.unobserve(entry.target);
+        });
+      },
+      { threshold: 0.15, rootMargin: "0px 0px -40px 0px" }
+    );
+    targets.forEach(function (el, i) {
+      el.classList.add("reveal");
+      // Small, capped stagger within each visual group so a row of cards
+      // doesn't all pop in in a single frame -- purely cosmetic, never
+      // delays content that's already in view on load.
+      el.style.transitionDelay = Math.min(i % 6, 6) * 40 + "ms";
+      io.observe(el);
+    });
+  })();
 })();
