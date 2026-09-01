@@ -154,6 +154,13 @@ def check_contrast():
         "Error text (#B3261E) on error bg (#FBEAE9)": ("#B3261E", "#FBEAE9"),
         "Success text (#1E7E34) on success bg (#E9F7EF)": ("#1E7E34", "#E9F7EF"),
         "Raw brand blue (#007BFF) on white -- NOT used for filled-button text, only links/accents": ("#007BFF", "#FFFFFF"),
+        # -- Design System V3 additions: new on-dark tokens used by the
+        # hero / stat-strip / CTA / footer signature-surface treatment.
+        "V3 text-on-dark-muted (#C7D2E0) on --ink-2 (#14304F)": ("#C7D2E0", "#14304F"),
+        "V3 blue-on-dark (#8FC4FF) on navy (#0A1A2F) -- hero eyebrow text": ("#8FC4FF", "#0A1A2F"),
+        "V3 blue-on-dark (#8FC4FF) on --ink-2 (#14304F)": ("#8FC4FF", "#14304F"),
+        "V3 green-accent (#00E676) on --ink-2 (#14304F) -- stat-strip check icons": ("#00E676", "#14304F"),
+        "V3 white on --ink-2 (#14304F) -- stat-strip numerals": ("#FFFFFF", "#14304F"),
     }
     for label, (fg, bg) in pairs.items():
         ratio = contrast_ratio(fg, bg)

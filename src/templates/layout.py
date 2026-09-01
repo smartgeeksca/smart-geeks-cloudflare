@@ -97,6 +97,9 @@ def head(*, title, description, path, og_image=None, noindex=False, extra_schema
 <meta name="twitter:title" content="{esc(title)}">
 <meta name="twitter:description" content="{esc(description)}">
 <meta name="twitter:image" content="{esc(og_image_url)}">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=Space+Grotesk:wght@500;700&amp;family=JetBrains+Mono:wght@500;700&amp;display=swap">
 <link rel="stylesheet" href="/assets/css/style.css">
 {extra_schema_html}
 {analytics_snippet()}""".strip("\n")
@@ -349,6 +352,22 @@ def hero(*, eyebrow=None, h1, sub, trust_items=None, whatsapp_key="default",
       {trust_html}
     </div>
     {media_html}
+  </div>
+</section>"""
+
+
+def stat_strip(stats) -> str:
+    """stats: list of (value, label) tuples. Dark signature-surface band with
+    large mono numerals -- used only for facts that are honestly countable
+    from real site/business data (device categories, service areas, etc.),
+    never a placeholder for an invented business metric."""
+    items = "\n    ".join(
+        f'<div class="stat-item"><span class="stat-value">{esc(v)}</span><span class="stat-label">{esc(l)}</span></div>'
+        for v, l in stats
+    )
+    return f"""<section class="stat-strip">
+  <div class="container stat-strip-inner">
+    {items}
   </div>
 </section>"""
 

@@ -1,5 +1,66 @@
 # Changelog
 
+## v1.4.0 -- Design System V3: premium technology-brand visual pass (2026-09-01)
+
+**Scope:** CSS, JS, and template/layout markup (layout.py, build.py) --
+still no business content, price, hours, warranty, or structured-data
+change. This pass moves beyond V2's component polish toward brand
+perception: a shared dark "signature surface" (hero / stat strip / CTA /
+footer), a real display+mono typographic system, an asymmetric bento
+layout, and a blueprint-style process diagram. Direction: Linear / Vercel
+/ Stripe / Supabase / Raycast / Notion / Apple-style premium technology
+marketing sites, translated into Smart Geeks' own brand colors and real
+content -- no Tailcast, no third-party copy/branding/imagery.
+
+### Added
+- Google Fonts request (Inter / Space Grotesk / JetBrains Mono,
+  preconnected, swap-displayed, only the weights used) -- a deliberate,
+  documented reversal of the earlier zero-external-font stance, made
+  because self-hosting requires a font-binary fetch this build
+  environment has no network path for, and system-ui alone can't
+  credibly deliver Linear/Stripe-grade typography. Full system-font
+  fallback stack retained.
+- `--mesh-bg` shared background recipe (radial-gradient glows + grid
+  lines) applied identically to `.hero`, `.stat-strip` (new), `.cta-block`,
+  and `.site-footer`, so all four dark sections read as one signature
+  brand surface.
+- New `.stat-strip` component with three honest, non-fabricated counts
+  (8 device categories, 4 cities served, 100% independently owned) --
+  every value traceable to `src/data/business.py` / `SERVICE_AREAS`.
+- New `.bento-grid` asymmetric layout, additive on top of `.card-grid`,
+  applied only to the homepage "why an independent shop" section.
+- Blueprint-style process section: dashed connecting trace line + mono
+  step numbers.
+- New on-dark color tokens (`--ink-2`, `--text-on-dark`,
+  `--text-on-dark-muted`, `--blue-on-dark`), each independently
+  contrast-verified and added as 5 new permanent checks in
+  `tests/qa.py` (33 -> 38 total contrast checks, all pass).
+- `.section-label` mono/uppercase technical-label utility.
+
+### Changed
+- `src/assets/css/style.css`: 23,068 -> 27,519 bytes (14 targeted edits).
+- `src/templates/layout.py`: 17,018 -> 17,950 bytes (Google Fonts link +
+  new `stat_strip()` component).
+- `build.py`: 34,894 -> 35,184 bytes (wire `stat_strip()` into the
+  homepage with honest counts; mark the "why" grid as `.bento-grid`).
+- `tests/qa.py`: 5 new permanent contrast checks added.
+- Hero headline scale: `--fs-3xl` (2.75rem) -> new `--fs-5xl` (4.25rem)
+  on desktop.
+- All headings switch from the body font to `--font-display`
+  (Space Grotesk), weight 800 -> 700, tracking -0.02em -> -0.03em.
+
+### Not changed
+- No business fact, price, warranty period, hours, or review data --
+  every stat-strip value is a real, checkable count, not a business
+  metric (this project's `business.py` keeps years-in-business,
+  review-count, etc. explicitly `None` until the owner supplies them,
+  by design -- V3 does not work around that).
+- No `.py` content module (`services.py`, `pages.py`, `legal.py`,
+  `landing.py`) -- 23 pages, 21 sitemap URLs, all structured data
+  byte-identical in content.
+- No color hex value -- every existing WCAG AA ratio unchanged; 5 new
+  ratios added, all independently verified >=7.3:1.
+
 ## v1.3.0 -- Design System V2: Tailcast-inspired visual upgrade (2026-09-01)
 
 **Scope:** CSS and JS only -- no content, business data, structured data,

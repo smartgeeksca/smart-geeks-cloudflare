@@ -161,13 +161,20 @@ def build_home():
     main_html = f"""
 {L.hero(eyebrow=h['hero_eyebrow'], h1=h['hero_h1'], sub=h['hero_sub'], trust_items=trust)}
 
+{L.stat_strip([
+    (str(len(ALL_SERVICE_ENTRIES) - 1), "Device categories repaired"),
+    (str(len(SERVICE_AREAS)), "Cities served across the Lower Mainland"),
+    ("100%", "Independently owned & operated"),
+])}
+
 <section class="section">
   <div class="container">
     <div class="section-head">
+      <span class="section-label">Why an independent shop</span>
       <h2>{L.esc(h['why_heading'])}</h2>
       <p>{h['why_intro']}</p>
     </div>
-    <div class="card-grid">
+    <div class="card-grid bento-grid">
       {why_cards}
     </div>
   </div>
