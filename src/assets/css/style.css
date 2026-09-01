@@ -408,4 +408,6 @@ th { color: var(--navy); }
 /* ---- Print ---------------------------------------------------------------------------------- */
 @media print {
   .site-header, .mobile-action-bar, .cta-block, .mobile-nav { display: none !important; }
+  /* Printed output must never depend on JS-driven scroll-reveal having fired. */
+  .reveal { opacity: 1 !important; transform: none !important; }
 }
