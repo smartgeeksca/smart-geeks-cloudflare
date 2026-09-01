@@ -1,5 +1,33 @@
 # Changelog
 
+## v1.2.0 -- Google Ads policy recovery: retire repair Ads landing pages (2026-09-01)
+
+**Root cause corrected.** Every earlier reference in this codebase and its
+docs to "Google Ads hardware-repair-services certification" was based on an
+incomplete reading of Google's Third-Party Consumer Technical Support
+policy. The current published policy text is a flat **prohibition** on
+advertising third-party consumer hardware repair services -- there is no
+certification path, and no landing-page quality changes that. Full
+research and per-campaign verdicts: `CURRENT-POLICY-SOURCE-REGISTER.md`
+and `CAMPAIGN-ELIGIBILITY-MATRIX.md` (delivered alongside this codebase).
+
+### Changed
+- `src/content/landing.py`: header rewritten to correct the false
+  "certification" framing; module retained for possible future organic-use
+  value but no longer wired into the build.
+- `build.py`: the landing-page generation loop is commented out. The four
+  repair "Ads" landing pages are no longer generated and no longer appear
+  in `sitemap.xml`.
+- `_redirects`: added four 301 rules sending the old landing-page paths to
+  their closest real, organic service page.
+- `README.md`, `QA-REPORT.md`, `LICENSE-NOTICE.md`: corrected every
+  reference to repair-ads "certification."
+
+### Not changed
+- The real service pages, blog posts, and location pages are untouched.
+- No business fact, price, warranty term, or claim was added or removed
+  from `src/data/business.py`.
+
 ## v1.1.1 -- Fix apex-to-www redirect after first real production deploy (2026-09-01)
 
 The first real Cloudflare Pages deploy of this project (Git-connected, per

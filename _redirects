@@ -19,3 +19,15 @@
 # This file is kept (rather than deleted) as the place same-path,
 # same-host redirects belong if any are ever needed -- e.g.
 #   /old-page/*  /new-page/:splat  301
+
+# --- Retired Google Ads landing pages (2026-09-01 policy recovery pass) ---
+# These four pages were built exclusively as Google Ads destinations for
+# repair-service campaigns that are PROHIBITED under Google's current
+# Third-Party Consumer Technical Support policy (see
+# CURRENT-POLICY-SOURCE-REGISTER.md). They duplicated content already on
+# the real service pages, so each one 301-redirects to its closest real,
+# organic service page. See URL-MIGRATION-MAP.md for rationale per URL.
+/landing/computer-repair-surrey-ads/*      /services/                 301
+/landing/laptop-repair-surrey-ads/*        /services/laptop-repair/   301
+/landing/mac-repair-surrey-ads/*           /services/                 301
+/landing/gaming-console-repair-surrey-ads/*  /services/gaming-console-repair/  301

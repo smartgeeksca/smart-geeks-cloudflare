@@ -1,22 +1,26 @@
 # -*- coding: utf-8 -*-
 """
-Google Ads landing page variants.
+ARCHIVED -- retired repair "Ads landing page" variants. NOT built into the
+site as of the 2026-09-01 policy-recovery pass. See
+CURRENT-POLICY-SOURCE-REGISTER.md and CAMPAIGN-ELIGIBILITY-MATRIX.md for
+why, and URL-MIGRATION-MAP.md for where each of these four paths now
+redirects.
 
-Compliance notes (see GOOGLE-ADS-COMPLIANCE.md for the full writeup):
-  - Google's "Third-Party Consumer Technical Support" policy
-    (support.google.com/adspolicy/answer/13527027) explicitly lists
-    "Hardware repair services" as a restricted category, alongside data
-    recovery and virus removal. That is a Google Ads *account/certification*
-    requirement, not something landing-page copy alone can satisfy -- it's
-    flagged here and in the compliance doc as an owner action item
-    (apply for the relevant Google certification, or confirm eligibility,
-    before spending on these ad groups).
-  - Copy on this page avoids known trigger phrases ("tech support",
-    "remote support", "unlock"/"jailbreak", "virus removal", "data
-    recovery") since Google's disapproval review reads landing pages, not
-    just ad text.
-  - No urgency ("today only"), no guarantees, no manufacturer-affiliation
-    language, no fake system-alert styling, no fake download buttons.
+CORRECTED framing (replaces an incorrect earlier comment, preserved below
+for traceability -- do not restore it): Google's "Third-Party Consumer
+Technical Support" policy (support.google.com/adspolicy/answer/13527027)
+is a flat PROHIBITION on advertising third-party hardware repair services
+to consumers. It is NOT an account-level certification an advertiser can
+apply for and pass -- there is no certification path for this category in
+the current published policy text. No landing-page copy changes that.
+
+--- PRESERVED FOR TRACEABILITY, SUPERSEDED, DO NOT FOLLOW ---
+Original text said this was a Google Ads "account/certification
+requirement... an owner action item (apply for the relevant Google
+certification, or confirm eligibility, before spending on these ad
+groups)." That framing implied a certification path existed. It does not.
+ROOT-CAUSE-AND-TRACEABILITY.md documents this correction in full.
+--- END PRESERVED NOTE ---
 """
 
 from src.data.business import BIZ

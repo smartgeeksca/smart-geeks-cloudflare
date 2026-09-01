@@ -971,8 +971,14 @@ def main():
     build_accessibility()
     build_thank_you()
     build_404()
-    for lp in LANDING_PAGES:
-        build_landing_page(lp)
+    # Repair "Ads landing pages" are retired as of the 2026-09-01 policy
+    # recovery pass -- see src/content/landing.py's header and
+    # URL-MIGRATION-MAP.md. No longer built; the four old paths are
+    # 301-redirected to their real service-page equivalents via the root
+    # _redirects file instead. Do not re-add this loop without first
+    # re-checking CAMPAIGN-ELIGIBILITY-MATRIX.md.
+    # for lp in LANDING_PAGES:
+    #     build_landing_page(lp)
 
     copy_assets()
     build_webmanifest()

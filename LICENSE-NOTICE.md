@@ -31,7 +31,12 @@ stock photography, no web font service, and no external CSS/JS framework:
   target; see DEPLOYMENT.md.
 - **Google Analytics 4 / Google Ads conversion tracking** -- only loaded if
   a real ID is configured (`src/data/business.py` -> `ANALYTICS_CONFIG`);
-  inert otherwise. Subject to Google's own terms if enabled.
+  inert otherwise. Subject to Google's own terms if enabled. The generic
+  sitewide conversion events this wiring can fire (`phone_click`,
+  `whatsapp_click`, `form_submit`) are not specific to any one campaign --
+  before ever supplying a real `google_ads_conversion_id`, confirm in
+  `CAMPAIGN-ELIGIBILITY-MATRIX.md` which campaigns, if any, are actually
+  eligible to receive that traffic.
 - **Google Maps** -- linked to via a plain search-query URL
   (`maps.google.com/...?q=...`) for directions and the reviews page; no
   Maps API or SDK is embedded.

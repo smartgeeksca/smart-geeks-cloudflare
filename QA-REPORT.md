@@ -164,7 +164,10 @@ Stated plainly rather than assumed to pass:
 - The contact form's email delivery requires Cloudflare Email Service
   secrets to be configured post-deploy (see DEPLOYMENT.md); until then it
   fails safely with an honest error rather than a false "sent" confirmation.
-- Google's hardware-repair-services Ads policy requires account-level
-  certification that this codebase cannot complete -- landing-page copy
-  avoids known trigger phrases, but the certification step itself is an
-  owner action item.
+- **Corrected 2026-09-01:** this line previously said Google's hardware-
+  repair-services Ads policy "requires account-level certification that
+  this codebase cannot complete." That was wrong -- current policy is a
+  flat prohibition on advertising this category to consumers, with no
+  certification path. The four repair Ads landing pages this note referred
+  to have been retired and redirect to the real service pages. See
+  `CAMPAIGN-ELIGIBILITY-MATRIX.md` for the corrected, per-campaign verdicts.

@@ -126,13 +126,20 @@ is hand-duplicated across pages.
   IMAGE-ASSET-MANIFEST.md); a CSS-based brand placeholder is used instead of
   a fabricated photo, and the manifest lists exactly what real photography
   to add later, with no layout change required.
-- **Google Ads policy:** landing-page copy avoids known trigger phrases
-  ("tech support," "remote support," "unlock/jailbreak," "virus removal,"
-  "data recovery") and makes no urgency/guarantee claims. Separately,
-  Google's Third-Party Consumer Technical Support policy explicitly lists
-  hardware repair services as a restricted ad category requiring account
-  certification -- that's an account-level Google Ads setup step, not
-  something page copy alone resolves. See "Owner action items."
+- **Google Ads policy (corrected 2026-09-01):** an earlier version of this
+  README described Google's Third-Party Consumer Technical Support policy
+  as requiring "account certification" -- implying a certification path
+  existed for repair-service ads. That was incorrect. The current published
+  policy (support.google.com/adspolicy/answer/13527027) is a flat
+  **prohibition** on advertising third-party consumer hardware repair
+  services -- there is no certification an advertiser can complete to
+  unlock it, independent of landing-page copy quality. The four pages
+  previously built under `src/content/landing.py` for this purpose have
+  been retired (see `URL-MIGRATION-MAP.md`) and now 301-redirect to the
+  real, organic service pages, which remain live and unaffected. Full
+  research and campaign-by-campaign eligibility verdicts live in
+  `CURRENT-POLICY-SOURCE-REGISTER.md` and `CAMPAIGN-ELIGIBILITY-MATRIX.md`
+  (delivered alongside this codebase, not committed into this repo).
 
 ## Owner action items
 
@@ -151,7 +158,7 @@ has a safe, honest default in the meantime (see the relevant file):
 | GA4 measurement ID | Analytics scripts don't load at all until set | `src/data/business.py` -> `ANALYTICS_CONFIG["ga4_measurement_id"]` |
 | Google Ads conversion ID/labels | Same as above | `src/data/business.py` -> `ANALYTICS_CONFIG` |
 | Transactional email provider credentials | Contact form fails safely with an honest error until configured | See DEPLOYMENT.md "Email delivery setup" |
-| Google Ads hardware-repair certification | Landing pages avoid policy trigger phrases, but certification is an account-level step this project can't complete | Google Ads account, not this codebase |
+| ~~Google Ads hardware-repair certification~~ Repair-service Google Ads eligibility | **Superseded 2026-09-01: this was never a certification gap.** Current policy prohibits this ad category outright; no owner action unlocks it. The four repair Ads landing pages were retired and now redirect to the real service pages. See `CAMPAIGN-ELIGIBILITY-MATRIX.md`. | N/A -- not a code or account fix; a different campaign strategy is required |
 | Final privacy/legal review of policy pages | Drafted in good faith, explicitly flagged as not lawyer-reviewed | `src/content/legal.py` |
 | Confirm domain ownership / "Finding Zero" | See README "Note on the reference site" above | Business decision, not a code change |
 
