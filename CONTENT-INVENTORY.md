@@ -1,5 +1,24 @@
 # Content Inventory
 
+**⚠ Known stale, 2026-09-01:** this file is out of sync with the actual
+build in two independent ways, found during this pass's documentation
+consistency check (`[SOURCE-VERIFIED]`): (1) rows 24-27 below (the four
+`/landing/*-surrey-ads/` pages) were retired from the build in the
+2026-09-01 policy-recovery pass and no longer exist in `public/` -- see
+`IMPLEMENTATION-CHANGELOG.md` and `URL-MIGRATION-MAP.md`. The current
+build produces 23 pages, not 27. (2) This table predates the blog
+(`/pages/blog/*`, 5 posts) and location (`/pages/locations/*`, 4 pages)
+content added in a later pass -- neither appears below at all, meaning
+this file was already stale before this recovery pass, independent of
+the Ads-landing-page correction. Regenerating this file accurately
+requires re-running its generation script against the current build
+rather than hand-editing the table below; that regeneration was not
+performed this pass -- flagged here rather than silently left
+contradicting the real 23-page build. Do not cite the "27 pages" or the
+table below as current.
+
+---
+
 27 pages, generated from `src/content/*` -- this list is produced directly
 from the same data `build.py` renders, so it can't drift out of sync with
 the actual site. (Regenerate this file any time by re-running the script in

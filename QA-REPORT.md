@@ -8,13 +8,19 @@ corresponding check having actually been executed.
 ## Commands run
 
 ```bash
-python3 build.py                                    # build succeeded, 27 pages generated
+python3 build.py                                    # build succeeded, 23 pages generated
 python3 tests/qa.py                                  # automated QA suite, see results below
 node --check functions/_middleware.js                # syntax OK
 node --check functions/api/contact.js                # syntax OK
 node --check src/assets/js/main.js                   # syntax OK
-python3 -m http.server (public/) + 34 real HTTP GETs  # every generated URL served, see below
+python3 -m http.server (public/) + real HTTP GETs     # every generated URL served, see below
 ```
+
+**Updated 2026-09-01 (recovery pass):** the counts below (23 pages, 21
+sitemap URLs) reflect the corrected build with the 4 repair Ads landing
+pages retired. This replaces the original 27-page/25-URL run from before
+that correction. Re-run `python3 build.py && python3 tests/qa.py`
+yourself to reproduce this; do not treat this document as proof on its own.
 
 ## Automated QA suite results (`tests/qa.py`)
 
@@ -27,17 +33,17 @@ SMART GEEKS -- AUTOMATED QA REPORT
 [WARN] Contrast: Raw brand blue (#007BFF) on white -- NOT used for filled-button
        text, only links/accents: 3.98:1 (fails AA; correctly not used for
        text-on-fill anywhere)
-[PASS] Pages generated: 27 HTML files found in public/
-[PASS] Placeholder text scan: Searched 27 files for VERIFY, TODO, TBD,
+[PASS] Pages generated: 23 HTML files found in public/
+[PASS] Placeholder text scan: Searched 23 files for VERIFY, TODO, TBD,
        PLACEHOLDER, FIXME, LOREM IPSUM, COMING SOON -- none found
 [PASS] Suspect fake-data scan: Searched for example.com, 555-0100, 555-1234,
        test@test.com, fake review, AW-XXXXXXX, G-XXXXXXXXXX -- none found
-[PASS] Duplicate title check: 27 unique titles across 27 pages
-[PASS] Duplicate meta description check: 27 unique descriptions across 27 pages
-[PASS] Every page has an H1: 27/27
-[PASS] Single H1 per page: 27/27
-[PASS] Canonical tag present: 27/27
-[PASS] Canonical host = https://www.smartgeeks.ca: 27/27
+[PASS] Duplicate title check: 23 unique titles across 23 pages
+[PASS] Duplicate meta description check: 23 unique descriptions across 23 pages
+[PASS] Every page has an H1: 23/23
+[PASS] Single H1 per page: 23/23
+[PASS] Canonical tag present: 23/23
+[PASS] Canonical host = https://www.smartgeeks.ca: 23/23
 [PASS] Internal link resolution: 0 broken internal links
 [PASS] href="#" scan: none found
 [PASS] Empty href scan: none found
@@ -55,7 +61,7 @@ SMART GEEKS -- AUTOMATED QA REPORT
 [PASS] Contrast: Success text (#1E7E34) on success bg (#E9F7EF): 4.65:1
 [PASS] robots.txt does not block production: no site-wide Disallow found
 [PASS] robots.txt references sitemap: OK
-[PASS] Sitemap URLs use canonical host: 25 URLs checked
+[PASS] Sitemap URLs use canonical host: 21 URLs checked
 [PASS] Sitemap excludes noindex pages: thank-you and 404 correctly excluded
 [PASS] _headers present: OK
 [PASS] _redirects present: OK
@@ -90,14 +96,15 @@ reconfirmed at 0 fail on rebuild.
 
 Every generated URL was served with `python3 -m http.server` against the
 real `public/` output and fetched with real HTTP requests (not just checked
-for file existence):
+for file existence) in the original (pre-correction) pass. **Not re-run
+against the corrected 23-page build this pass** -- `[CANNOT-VERIFY]` for
+this specific smoke-test number until it's re-run; the automated
+`tests/qa.py` suite above (which does check every generated file
+structurally) was re-run and is current.
 
-```
-34/34 returned 200
-```
-
-Covers all 27 pages plus `sitemap.xml`, `robots.txt`, `site.webmanifest`,
-and 4 representative static assets (CSS, JS, SVG icon, ICO favicon).
+Covers all pages plus `sitemap.xml`, `robots.txt`, `site.webmanifest`,
+and representative static assets (CSS, JS, SVG icon, ICO favicon) as of
+the original run.
 
 ## Additional manual checks performed
 
