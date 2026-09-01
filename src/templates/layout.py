@@ -372,6 +372,20 @@ def stat_strip(stats) -> str:
 </section>"""
 
 
+def statement_band(text: str, *, eyebrow=None) -> str:
+    """One oversized typographic statement -- used once per page, at most,
+    as a deliberate pacing break between denser sections. Not a pull-quote
+    from a person (no fabricated attribution); the text passed in must be
+    real, already-approved site copy."""
+    eyebrow_html = f'<span class="section-label">{esc(eyebrow)}</span>' if eyebrow else ""
+    return f"""<section class="statement-band">
+  <div class="container">
+    {eyebrow_html}
+    <p class="statement">{text}</p>
+  </div>
+</section>"""
+
+
 def disclosure_note(long_form: str) -> str:
     return f'<p class="disclosure-note">{long_form}</p>'
 

@@ -133,27 +133,95 @@ def service_faq_schema_and_html(faqs, heading="Frequently asked questions"):
 # Home
 # --------------------------------------------------------------------------- #
 
+# Device-ecosystem taxonomy -- a presentation-layer grouping only (no new
+# service, no content change); motherboard/chip-level work is deliberately
+# excluded from the three clusters below because it cuts across all of
+# them rather than belonging to one, so it renders as its own capability
+# band instead of being force-fit into a cluster it doesn't uniquely suit.
+DEVICE_CLUSTERS = [
+    ("PC & Windows systems", ["laptop-repair", "desktop-repair"]),
+    ("Apple hardware", ["macbook-repair", "imac-repair", "mac-mini-repair"]),
+    ("Peripherals & consoles", ["printer-repair", "gaming-console-repair"]),
+]
+CAPABILITY_SLUG = "motherboard-chip-level-repair"
+
+
+def device_ecosystem_html(by_slug, extra_slugs=None):
+    """Shared by the homepage and the services index -- one grouped-taxonomy
+    rendering used in both places instead of two different card grids.
+    extra_slugs: services that don't fit any cluster and render as their own
+    full-width band instead (default: just the cross-cutting chip-level
+    capability; the services index additionally passes buy-sell-trade,
+    since that page -- unlike the homepage, which gives it a whole flagship
+    section -- has no other place for it to stay discoverable)."""
+    cluster_blocks = []
+    for label, slugs in DEVICE_CLUSTERS:
+        chips = "\n        ".join(
+            f'<a class="device-chip" href="/services/{slug}/">'
+            f'<span class="device-chip-icon" aria-hidden="true">{glyph(by_slug[slug]["icon"])}</span>'
+            f'<span><span class="device-chip-title">{L.esc(by_slug[slug].get("h1") or by_slug[slug]["nav_label"])}</span>'
+            f'<span class="device-chip-summary">{L.esc(by_slug[slug]["card_summary"])}</span></span></a>'
+            for slug in slugs
+        )
+        cluster_blocks.append(
+            f'<div class="device-cluster"><h3 class="device-cluster-label">{L.esc(label)}</h3>'
+            f'<div class="device-cluster-items">\n        {chips}\n      </div></div>'
+        )
+    cluster_html = "\n    ".join(cluster_blocks)
+
+    extra_slugs = extra_slugs if extra_slugs is not None else [CAPABILITY_SLUG]
+    band_blocks = []
+    for slug in extra_slugs:
+        svc = by_slug[slug]
+        label = "Cuts across every category above" if slug == CAPABILITY_SLUG else "Also at our Surrey location"
+        band_blocks.append(f"""<a class="capability-band" href="/services/{svc['slug']}/">
+      <span class="capability-band-icon" aria-hidden="true">{glyph(svc['icon'])}</span>
+      <span class="capability-band-copy">
+        <span class="section-label">{label}</span>
+        <h3>{L.esc(svc.get('h1') or svc['nav_label'])}</h3>
+        <p>{L.esc(svc['card_summary'])}</p>
+      </span>
+      <span class="capability-band-arrow" aria-hidden="true">&rarr;</span>
+    </a>""")
+    bands_html = "\n    ".join(band_blocks)
+    return f"""<div class="device-ecosystem">
+      {cluster_html}
+    </div>
+    {bands_html}"""
+
+
 def build_home():
     h = P.HOME
     trust = h["trust_items"]
+    by_slug = {s["slug"]: s for s in ALL_SERVICE_ENTRIES}
 
-    why_cards = "\n".join(
-        f'<div class="info-card"><h3>{L.esc(t)}</h3><p class="text-muted">{b}</p></div>'
-        for t, b in h["why_points"]
+    # Brand-story statement: the existing why_intro paragraph split at its
+    # first sentence boundary -- the opening sentence becomes one large
+    # typographic "moment" (the seeing-not-reading fix), the remainder
+    # becomes the repair-intelligence section's own intro. Same approved
+    # copy, no new sentence written; src/content/pages.py is untouched.
+    why_intro = h["why_intro"]
+    split_at = why_intro.index(". ") + 1
+    statement_text = why_intro[:split_at].strip()
+    intel_intro = why_intro[split_at:].strip()
+
+    intel_points_html = "\n      ".join(
+        f'<li><h3>{L.esc(t)}</h3><p>{b}</p></li>' for t, b in h["why_points"]
     )
-
-    process_html = "\n".join(
+    process_html = "\n      ".join(
         f'<li><span class="step-num">{i+1}</span><div><h3>{L.esc(t)}</h3><p>{b}</p></div></li>'
         for i, (t, b) in enumerate(h["process_steps"])
     )
 
-    service_cards = "\n".join(
-        L.service_card(href=f"/services/{s['slug']}/", title=s.get("h1") or s.get("nav_label"),
-                        summary=s["card_summary"], icon_svg=glyph(s["icon"]))
-        for s in ALL_SERVICE_ENTRIES
-    )
+    ecosystem_html = device_ecosystem_html(by_slug)
 
-    area_items = "\n".join(f"<li>{a}</li>" for a in SERVICE_AREAS)
+    # Buy/Sell/Trade: promoted from "one card among nine" to its own
+    # section, reusing BUY_SELL_TRADE's real, already-approved copy verbatim.
+    bst = BUY_SELL_TRADE
+    bst_tags = "\n      ".join(f"<li>{L.esc(item)}</li>" for item in bst["what_we_accept"])
+    bst_wa = whatsapp_href(WHATSAPP_MESSAGES.get(bst["whatsapp_key"], WHATSAPP_MESSAGES["default"]))
+
+    area_items = "".join(f"<li>{L.esc(a)}</li>" for a in SERVICE_AREAS)
 
     home_faqs = [P.get_faq(slug) for slug in P.HOME_FAQ_SLUGS]
     faq_html = L.faq_accordion(home_faqs, heading=h["faq_heading"], id_prefix="home-faq")
@@ -167,49 +235,73 @@ def build_home():
     ("100%", "Independently owned & operated"),
 ])}
 
-<section class="section">
-  <div class="container">
-    <div class="section-head">
-      <span class="section-label">Why an independent shop</span>
+{L.statement_band(statement_text, eyebrow="What we are, and aren't")}
+
+<section class="intel-section">
+  <div class="container split-editorial">
+    <div class="intel-copy">
+      <span class="section-label">How we think about repair</span>
       <h2>{L.esc(h['why_heading'])}</h2>
-      <p>{h['why_intro']}</p>
+      <p>{intel_intro}</p>
+      <ul class="intel-points">
+        {intel_points_html}
+      </ul>
     </div>
-    <div class="card-grid bento-grid">
-      {why_cards}
+    <div class="intel-process">
+      <ol class="step-list">
+        {process_html}
+      </ol>
     </div>
   </div>
 </section>
 
 <section class="section section-alt">
   <div class="container">
-    <div class="section-head"><h2>{L.esc(h['process_heading'])}</h2></div>
-    <ol class="step-list">
-      {process_html}
-    </ol>
-  </div>
-</section>
-
-<section class="section">
-  <div class="container">
     <div class="section-head">
+      <span class="section-label">Device ecosystem</span>
       <h2>{L.esc(h['services_heading'])}</h2>
       <p>{h['services_intro']}</p>
     </div>
-    <div class="card-grid">
-      {service_cards}
+    {ecosystem_html}
+  </div>
+</section>
+
+<section class="flagship-split">
+  <div class="container split-editorial reverse">
+    <div>{L.image_frame('trade', alt='')}</div>
+    <div class="flagship-copy">
+      <span class="section-label">Also at our Surrey location</span>
+      <h2>{L.esc(bst['h1'])}</h2>
+      <p>{bst['answer']}</p>
+      <ul class="flagship-tags">
+        {bst_tags}
+      </ul>
+      <p class="flagship-note">{bst['sustainability_note']}</p>
+      <div class="hero-actions">
+        <a class="btn btn-primary" href="/services/buy-sell-trade/">See how it works</a>
+        <a class="btn btn-ghost" href="{bst_wa}" target="_blank" rel="noopener">Ask on WhatsApp</a>
+      </div>
     </div>
   </div>
 </section>
 
-<section class="section section-alt">
-  <div class="container two-col">
+<section class="authority-section">
+  <div class="container split-editorial">
     <div>
+      <span class="section-label">Local authority</span>
       <h2>{L.esc(h['areas_heading'])}</h2>
       <p>{h['areas_intro']}</p>
-      <ul>{area_items}</ul>
-      <p><a class="btn btn-ghost" href="/service-areas/">See service area details</a></p>
+      <ul class="authority-areas">{area_items}</ul>
+      <p style="margin-top: var(--space-3);"><a class="btn btn-ghost" href="/service-areas/">See service area details</a></p>
     </div>
-    <div>{L.image_frame('diagnose', alt='')}</div>
+    <dl class="authority-readout">
+      <dt>Location</dt>
+      <dd>{L.esc(BIZ['address']['full_display'])}</dd>
+      <dt>Phone</dt>
+      <dd>{L.esc(BIZ['phone_display_full'])}</dd>
+      <dt>Email</dt>
+      <dd>{L.esc(BIZ['email'])}</dd>
+    </dl>
   </div>
 </section>
 
@@ -238,11 +330,8 @@ def build_home():
 
 def build_services_overview():
     d = P.SERVICES_OVERVIEW
-    cards = "\n".join(
-        L.service_card(href=f"/services/{s['slug']}/", title=s.get("h1") or s.get("nav_label"),
-                        summary=s["card_summary"], icon_svg=glyph(s["icon"]))
-        for s in ALL_SERVICE_ENTRIES
-    )
+    by_slug = {s["slug"]: s for s in ALL_SERVICE_ENTRIES}
+    ecosystem_html = device_ecosystem_html(by_slug, extra_slugs=[CAPABILITY_SLUG, "buy-sell-trade"])
     how_items = "\n".join(f"<p>{p}</p>" for p in d["how_we_work"])
     bc = L.breadcrumbs(crumbs(("Home", "/"), ("Services", "/services/")))
 
@@ -255,9 +344,7 @@ def build_services_overview():
       <p class="hero-sub">{d['answer']}</p>
       {para_list(d['intro'])}
     </div>
-    <div class="card-grid">
-      {cards}
-    </div>
+    {ecosystem_html}
   </div>
 </section>
 <section class="section section-alt">

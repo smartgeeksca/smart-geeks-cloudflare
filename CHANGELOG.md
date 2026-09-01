@@ -1,5 +1,71 @@
 # Changelog
 
+## v1.5.0 -- Layout System V4: homepage & services-index rearchitecture (2026-09-01)
+
+**Scope:** CSS, JS templates (layout.py), and page composition (build.py) --
+still no business content, price, hours, warranty, or structured-data
+change; every string rendered by the new sections is either pulled
+verbatim from src/content/pages.py / services.py / business.py, or is a
+short structural/wayfinding label (a "section-label" eyebrow), never a
+new marketing claim. This pass responds to explicit feedback that V2/V3
+polished the existing template's surface without changing its underlying
+section skeleton -- V4 changes the skeleton itself on the two
+highest-traffic pages (homepage, services index).
+
+### Added
+- `.split-editorial` -- reusable asymmetric two-column grid (7fr/5fr,
+  `.reverse` variant swaps which side is wide) used by every new module
+  below, so consecutive sections alternate visual emphasis left-to-right
+  down the page instead of stacking identical blocks.
+- `.statement-band` / `statement_band()` -- a single oversized typographic
+  moment; the homepage's brand-story paragraph is split at its first
+  sentence boundary (via `str.index()` in build.py, not a content edit)
+  so the opening sentence becomes this moment and the rest becomes the
+  new repair-intelligence section's intro.
+- Repair-intelligence section -- merges the old separate "why an
+  independent shop" card grid and "how a repair works" numbered list into
+  one `.split-editorial` section (philosophy left, process right).
+- Device-ecosystem taxonomy (`device_ecosystem_html()`, shared by the
+  homepage and `/services/`) -- the 8 device-repair categories grouped
+  into 3 labeled clusters (PC & Windows / Apple hardware / Peripherals &
+  consoles) instead of one flat 9-card grid; chip-level repair renders as
+  its own cross-cutting `.capability-band` since it applies across every
+  cluster rather than belonging to one.
+- Buy/Sell/Trade flagship section on the homepage -- promoted from "1 card
+  among 9" to its own `.flagship-split` chapter, reusing BUY_SELL_TRADE's
+  existing copy verbatim (answer, what_we_accept, sustainability_note).
+- Local-authority "readout" section -- same real address/phone/email/
+  service-area facts, presented as a monospaced `<dl>` status-panel card
+  instead of a generic two-column text+image block.
+- `--space-8` (8rem) / `--space-9` (11rem) large "editorial moment"
+  spacing tokens.
+- Hero upgraded to a true full-viewport moment site-wide
+  (`min-height: min(86vh, 780px)` on desktop) -- applies to every page
+  that calls the shared `hero()` component, not just the homepage.
+
+### Changed
+- `src/assets/css/style.css`: 27,519 -> 34,220 bytes.
+- `src/templates/layout.py`: 17,962 -> 18,527 bytes (+ `statement_band()`).
+- `build.py`: 35,184 -> 39,769 bytes (`build_home()` fully rewritten;
+  `build_services_overview()` rewired onto the shared device-ecosystem
+  taxonomy, now also surfacing buy-sell-trade as a second capability-style
+  band since that page has no separate flagship section for it).
+
+### Not changed
+- No `.py` content module -- 23 pages, 21 sitemap URLs, all structured
+  data byte-identical in content; internal-link-resolution check
+  independently confirms 0 broken links (buy-sell-trade's move out of the
+  flat services grid did not orphan that page on either the homepage or
+  the services index).
+- No color hex value, and no new on-dark color combination was
+  introduced -- every new component reuses V3's already-verified tokens,
+  so the contrast-check count is unchanged at 38 pass / 1 expected warn /
+  0 fail.
+- Individual service pages, About, Contact, FAQ, Reviews, policy pages,
+  404, and Thank-you were NOT rearchitected in this pass -- see
+  09-V4-ARCHITECTURE-AND-WIREFRAMES.md for honest, page-by-page
+  [RECOMMENDATION]-labeled proposals for each, not yet implemented.
+
 ## v1.4.0 -- Design System V3: premium technology-brand visual pass (2026-09-01)
 
 **Scope:** CSS, JS, and template/layout markup (layout.py, build.py) --
