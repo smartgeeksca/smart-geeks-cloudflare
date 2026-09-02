@@ -71,11 +71,25 @@ def analytics_snippet() -> str:
 # <head>
 # ---------------------------------------------------------------------------
 
+# Anti-FOUC theme bootstrap: a plain (non-f-string) constant so its JS braces
+# are never mistaken for f-string interpolation. Inlined -- not a separate
+# request -- and kept tiny on purpose: it only sets data-theme from a
+# previously *stored* explicit choice, before the stylesheet paints anything.
+# No stored choice at all means "follow the OS", which style.css already
+# handles on its own via prefers-color-scheme, so this script does nothing
+# in that case -- it never fabricates a preference the visitor didn't set.
+THEME_INIT_SCRIPT = (
+    '<script>(function(){try{var t=localStorage.getItem("sg-theme");'
+    'if(t==="dark"||t==="light"){document.documentElement.setAttribute("data-theme",t);}'
+    '}catch(e){}})();</script>'
+)
+
 def head(*, title, description, path, og_image=None, noindex=False, extra_schema_html=""):
     canonical = SITE.rstrip("/") + path
     og_image_url = og_image or (SITE.rstrip("/") + "/assets/images/og-default.svg")
     robots = "noindex, nofollow" if noindex else "index, follow"
     return f"""<meta charset="UTF-8">
+{THEME_INIT_SCRIPT}
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>{esc(title)}</title>
 <meta name="description" content="{esc(description)}">
@@ -136,8 +150,17 @@ def header_nav(current_path: str) -> str:
         <svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M6.6 10.8c1.4 2.8 3.8 5.2 6.6 6.6l2.2-2.2c.3-.3.7-.4 1-.2 1.1.4 2.3.6 3.6.6.6 0 1 .4 1 1V20c0 .6-.4 1-1 1C10.5 21 3 13.5 3 4c0-.6.4-1 1-1h3.4c.6 0 1 .4 1 1 0 1.3.2 2.5.6 3.6.1.4 0 .8-.3 1L6.6 10.8Z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></svg>
         <span>{esc(BIZ['phone_display'])}</span>
       </a>
+      <button type="button" class="theme-toggle theme-toggle--desktop" aria-label="Switch to dark mode" aria-pressed="false">
+        <svg class="icon-sun" aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="4.2" stroke="currentColor" stroke-width="1.6"/><path d="M12 2.5v2.4M12 19.1v2.4M4.2 4.2l1.7 1.7M18.1 18.1l1.7 1.7M2.5 12h2.4M19.1 12h2.4M4.2 19.8l1.7-1.7M18.1 5.9l1.7-1.7" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+        <svg class="icon-moon" aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M20 14.3A8.4 8.4 0 1 1 9.7 4a6.7 6.7 0 0 0 10.3 10.3Z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></svg>
+      </button>
       <a class="btn btn-primary" href="/contact/">Contact us</a>
     </div>
+
+    <button type="button" class="theme-toggle theme-toggle--mobile" aria-label="Switch to dark mode" aria-pressed="false">
+      <svg class="icon-sun" aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="4.2" stroke="currentColor" stroke-width="1.6"/><path d="M12 2.5v2.4M12 19.1v2.4M4.2 4.2l1.7 1.7M18.1 18.1l1.7 1.7M2.5 12h2.4M19.1 12h2.4M4.2 19.8l1.7-1.7M18.1 5.9l1.7-1.7" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+      <svg class="icon-moon" aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M20 14.3A8.4 8.4 0 1 1 9.7 4a6.7 6.7 0 0 0 10.3 10.3Z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></svg>
+    </button>
 
     <details class="mobile-nav">
       <summary aria-label="Open menu">

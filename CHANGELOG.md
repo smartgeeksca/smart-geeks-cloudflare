@@ -1,5 +1,68 @@
 # Changelog
 
+## v1.6.0 -- Light/Dark Theme System, cloned from smartgeeks.ca's design language (2026-09-02)
+
+**Scope:** CSS and JS/template only (`style.css`, `layout.py`, `main.js`,
+`tests/qa.py`) -- no content module touched, no business fact changed or
+added. This pass followed an explicit reversal of direction: instead of a
+new visual concept (V2/V3/V4's Tailcast/Linear/Stripe-inspired explorations),
+the brief asked for the Cloudflare project to match the real production
+site's (https://smartgeeks.ca/) actual design system -- structure, rhythm,
+components -- while keeping 100% of the Cloudflare project's own verified
+content, SEO, schema, and compliance work untouched. See
+12-SMARTGEEKS-CA-DESIGN-DNA-REPORT.md and
+13-COMPONENT-MAPPING-AND-DIFFERENCE-REPORT.md for the full reverse-engineering
+and an honest list of what was and wasn't built.
+
+### Added
+- A complete light/dark theme system -- the one component the real site has
+  that the Cloudflare project genuinely lacked entirely. Light remains the
+  default (matches the Cloudflare project's existing look exactly, zero
+  visual change for anyone who never touches the toggle). Dark is available
+  via a header toggle (desktop and mobile, sun/moon icon matching the real
+  site's convention), auto-applies when the OS/browser prefers dark and the
+  visitor hasn't chosen explicitly (`@media (prefers-color-scheme: dark)`),
+  and an explicit choice always wins over the OS preference in either
+  direction. Persisted via `localStorage` (`sg-theme` key); a tiny inline
+  anti-flash script in `<head>` applies a *stored* choice before first paint
+  so there's no flash of the wrong theme -- the no-preference-at-all case is
+  handled entirely by CSS, no JS involved.
+- New semantic CSS tokens (`--heading`, `--link`, `--chip-bg`/`--chip-fg`,
+  `--header-bg`) split off the existing brand tokens (`--navy`,
+  `--blue-button`) specifically so the theme can flip text/link colors
+  without touching the brand's fixed dark-surface and filled-button colors,
+  which stay identical in both themes by design (hero, footer, CTA band,
+  and primary/secondary buttons look the same whichever theme is active).
+- A full dark-theme token layer: 4 surface tiers, text/muted-text, 3 border
+  tiers, chip colors, header background, focus ring, and form-status
+  colors -- 20 new color pairs, every one independently contrast-verified
+  in `tests/qa.py` before being written into CSS (worst case 5.27:1,
+  comfortably over the 4.5:1 AA floor for text).
+
+### Changed
+- `src/assets/css/style.css`: 34,220 -> 38,138 bytes.
+- `src/templates/layout.py`: 18,527 -> 20,798 bytes (`THEME_INIT_SCRIPT`
+  constant, theme-toggle buttons in `header_nav()`).
+- `src/assets/js/main.js`: 10,392 bytes (new `themeToggle()` IIFE).
+- `tests/qa.py`: 38 -> 53 checks (15 new dark-theme contrast pairs; zero
+  existing checks changed).
+
+### Not changed
+- No content module (`business.py`, `services.py`, `pages.py`, `legal.py`,
+  `landing.py`) was touched -- every string on every page is byte-identical
+  to the V4 baseline. 23 pages, 21 sitemap URLs, all structured data,
+  canonical tags, and internal links unchanged and re-verified.
+- No business fact from the real smartgeeks.ca site (its review rating,
+  weekly repair count, "since [year]" founding claim, or e-waste
+  credential) was copied into the Cloudflare project -- `business.py`'s
+  `OWNER_PENDING` still keeps those fields `None` pending the real owner's
+  confirmation. Only the real site's *design pattern* (a trust-bar
+  component exists, in that position, in that visual form) was cloned,
+  populated with the Cloudflare project's own already-verified facts.
+- Section-by-section homepage/service-page rearchitecture (V4's job) was
+  not repeated or undone -- this pass is additive on top of V4's layout,
+  not a replacement for it.
+
 ## v1.5.0 -- Layout System V4: homepage & services-index rearchitecture (2026-09-01)
 
 **Scope:** CSS, JS templates (layout.py), and page composition (build.py) --

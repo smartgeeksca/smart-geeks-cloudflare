@@ -211,4 +211,55 @@
       io.observe(el);
     });
   })();
+
+  // ---- Light/dark theme toggle (v1.6.0) ------------------------------------
+  // The <html data-theme="..."> attribute is the single source of truth.
+  // A tiny inline script in <head> (layout.py:head()) already set it
+  // synchronously from localStorage before first paint, so there is no
+  // flash of the wrong theme -- this block only wires up the click
+  // handlers and keeps the toggle buttons' accessible state in sync.
+  // No stored preference at all means "follow the OS" -- CSS alone
+  // handles that case via @media (prefers-color-scheme: dark), so this
+  // code never writes an attribute unless the visitor actually clicks.
+  (function themeToggle() {
+    var STORAGE_KEY = "sg-theme";
+    var toggles = document.querySelectorAll(".theme-toggle");
+    if (!toggles.length) return;
+
+    function prefersDark() {
+      return !!(window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches);
+    }
+
+    function isDarkActive() {
+      var explicit = document.documentElement.getAttribute("data-theme");
+      if (explicit === "dark") return true;
+      if (explicit === "light") return false;
+      return prefersDark();
+    }
+
+    function syncToggleState() {
+      var dark = isDarkActive();
+      toggles.forEach(function (btn) {
+        btn.setAttribute("aria-pressed", dark ? "true" : "false");
+        btn.setAttribute("aria-label", dark ? "Switch to light mode" : "Switch to dark mode");
+      });
+    }
+
+    toggles.forEach(function (btn) {
+      btn.addEventListener("click", function () {
+        var next = isDarkActive() ? "light" : "dark";
+        document.documentElement.setAttribute("data-theme", next);
+        try {
+          localStorage.setItem(STORAGE_KEY, next);
+        } catch (e) {
+          // Private browsing / storage disabled -- theme still applies for
+          // this page view, it just won't persist to the next one.
+        }
+        syncToggleState();
+        trackEvent("theme_toggle", { theme: next });
+      });
+    });
+
+    syncToggleState();
+  })();
 })();

@@ -161,6 +161,27 @@ def check_contrast():
         "V3 blue-on-dark (#8FC4FF) on --ink-2 (#14304F)": ("#8FC4FF", "#14304F"),
         "V3 green-accent (#00E676) on --ink-2 (#14304F) -- stat-strip check icons": ("#00E676", "#14304F"),
         "V3 white on --ink-2 (#14304F) -- stat-strip numerals": ("#FFFFFF", "#14304F"),
+        # -- Light/Dark Theme System (v1.6.0): dark-theme token values,
+        # checked against every surface they actually render on (body,
+        # alt-section, and raised-card backgrounds). Pre-blended rgba
+        # tokens (--chip-bg, --header-bg) are checked at their composited
+        # hex value over the darkest surface they can sit on, since
+        # contrast_ratio() here takes solid hex, not alpha.
+        "V5 dark body text (#C9D4E0) on dark surface (#0B1728)": ("#C9D4E0", "#0B1728"),
+        "V5 dark body text (#C9D4E0) on dark bg-soft (#101F33)": ("#C9D4E0", "#101F33"),
+        "V5 dark body text (#C9D4E0) on dark raised card (#14304F)": ("#C9D4E0", "#14304F"),
+        "V5 dark muted text (#93A4B8) on dark surface (#0B1728)": ("#93A4B8", "#0B1728"),
+        "V5 dark muted text (#93A4B8) on dark bg-soft (#101F33)": ("#93A4B8", "#101F33"),
+        "V5 dark muted text (#93A4B8) on dark raised card (#14304F)": ("#93A4B8", "#14304F"),
+        "V5 dark heading (#FFFFFF) on dark surface (#0B1728)": ("#FFFFFF", "#0B1728"),
+        "V5 dark link/accent (#8FC4FF) on dark surface (#0B1728)": ("#8FC4FF", "#0B1728"),
+        "V5 dark link/accent (#8FC4FF) on dark bg-soft (#101F33)": ("#8FC4FF", "#101F33"),
+        "V5 dark link/accent (#8FC4FF) on dark raised card (#14304F)": ("#8FC4FF", "#14304F"),
+        "V5 dark success text (#4ADE80) on dark surface (#0B1728)": ("#4ADE80", "#0B1728"),
+        "V5 dark error text (#F87171) on dark surface (#0B1728)": ("#F87171", "#0B1728"),
+        "V5 chip-fg (#8FC4FF) on chip-bg composited over raised card (~#254568)": ("#8FC4FF", "#254568"),
+        "V5 chip-fg (#8FC4FF) on chip-bg composited over dark surface (~#1D2F46)": ("#8FC4FF", "#1D2F46"),
+        "V5 header-bg (translucent navy) composited over dark surface, white nav text (~#0A192E)": ("#FFFFFF", "#0A192E"),
     }
     for label, (fg, bg) in pairs.items():
         ratio = contrast_ratio(fg, bg)
